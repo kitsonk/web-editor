@@ -196,10 +196,6 @@ startGistRouter({
 });
 ```
 
-### FileBar
-
-Displays an array of tabs which is designed to represent open files.
-
 ### IconCss
 
 This widget injects a `<style>` element which contains the CSS which is dynamically generated based on an object structure which defines different icon types.

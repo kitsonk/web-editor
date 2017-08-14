@@ -9,7 +9,6 @@ let main: any;
 
 /* tslint:disable:variable-name */
 let Editor: any;
-let FileBar: any;
 let IconCss: any;
 let project: any;
 let Runner: any;
@@ -21,7 +20,6 @@ registerSuite({
 
 	async setup() {
 		Editor = {};
-		FileBar = {};
 		IconCss = {};
 		project = {};
 		routing = {};
@@ -30,9 +28,6 @@ registerSuite({
 
 		register('src/Editor', {
 			default: Editor
-		});
-		register('src/FileBar', {
-			default: FileBar
 		});
 		register('src/IconCss', {
 			default: IconCss
@@ -58,12 +53,11 @@ registerSuite({
 
 	async 'validate API'() {
 		assert.strictEqual(main.Editor, Editor);
-		assert.strictEqual(main.FileBar, FileBar);
 		assert.strictEqual(main.IconCss, IconCss);
 		assert.strictEqual(main.project, project);
 		assert.strictEqual(main.routing, routing);
 		assert.strictEqual(main.Runner, Runner);
 		assert.strictEqual(main.TreePane, TreePane);
-		assert.lengthOf(Object.keys(main), 7, 'should have only 7 exports');
+		assert.lengthOf(Object.keys(main), 6, 'should have only 7 exports');
 	}
 });
