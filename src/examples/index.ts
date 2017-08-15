@@ -2,10 +2,12 @@ import { assign } from '@dojo/core/lang';
 import { Request } from '@dojo/routing/interfaces';
 import { find, includes } from '@dojo/shim/array';
 import { v, w } from '@dojo/widget-core/d';
+import { WNode } from '@dojo/widget-core/interfaces';
 import Projector from '@dojo/widget-core/mixins/Projector';
 import WidgetBase from '@dojo/widget-core/WidgetBase';
+import TabPane from '@dojo/widgets/tabpane/TabPane';
+import Tab from '@dojo/widgets/tabpane/Tab';
 import Editor from '../Editor';
-import FileBar, { FileItem } from '../FileBar';
 import IconCss from '../IconCss';
 import TreePane, { TreePaneItem } from '../TreePane';
 import * as css from '../styles/treepane.m.css';
@@ -133,13 +135,14 @@ class App extends WidgetBase {
 		return this._activeFileIndex;
 	}
 
-	private _getFileItems(): FileItem[] {
+	private _getFileTabs(): WNode<Tab>[] {
 		return this._openFiles.map((filename) => {
-			return {
+			return w(Tab, {
 				closeable: true,
 				key: filename,
+				theme: darkTheme,
 				label: filename.split(/[\/\\]/).pop()!
-			};
+			});
 		});
 	}
 
@@ -262,7 +265,7 @@ class App extends WidgetBase {
 		this.invalidate();
 	}
 
-	private _onRequestTabClose(file: FileItem, index: number) {
+	private _onRequestTabClose(index: number) {
 		this._openFiles.splice(index, 1);
 		this._activeFileIndex = this._activeFileIndex >= this._openFiles.length ?
 			this._openFiles.length - 1 : this._activeFileIndex === index ?
@@ -272,7 +275,7 @@ class App extends WidgetBase {
 		this.invalidate();
 	}
 
-	private _onRequestTabChange(file: FileItem, index: number) {
+	private _onRequestTabChange(index: number) {
 		this._selected = this._editorFilename = this._openFiles[this._activeFileIndex = index];
 		this.invalidate();
 	}
@@ -374,14 +377,13 @@ class App extends WidgetBase {
 					v('div', {
 						styles: { flex: '1', margin: '0 0.5em' }
 					}, [
-						this._openFiles.length ? w(FileBar, {
+						this._openFiles.length ? w(TabPane, {
 							activeIndex: this._getActiveFile(),
-							files: this._getFileItems(),
 							key: 'filebar',
 							theme: darkTheme,
 							onRequestTabClose: this._onRequestTabClose,
 							onRequestTabChange: this._onRequestTabChange
-						}) : null,
+						}, this._getFileTabs()) : null,
 						w(Editor, {
 							filename: this._editorFilename,
 							key: 'editor',
